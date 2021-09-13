@@ -63,7 +63,7 @@ static uint8_t pcntNumCh;
 int xPulseCountInit(int NumCh) {
 	if (OUTSIDE(0, NumCh, 255, int)) return erFAILURE;
 	pcntNumCh = NumCh ;
-	psPCdata = malloc(NumCh * sizeof(pulsecnt_t)) ;
+	psPCdata = pvRtosMalloc(NumCh * sizeof(pulsecnt_t)) ;
 	return erSUCCESS;
 }
 
