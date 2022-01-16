@@ -114,7 +114,7 @@ int	xPulseCountIncrement(int Idx) {
 	if (OUTSIDE(0, Idx, pcntNumCh, int)) return erFAILURE;
 	pulsecnt_t * psPC = psPCdata[Idx] ;
 	psPC->MinTD++ ;
-	IF_TRACK(psPC->MinTD == 0, "Wrapped, Pulse rate too high\n") ;
+	IF_TL(psPC->MinTD == 0, "Wrapped, Pulse rate too high\n") ;
 	psPC->HourTD++ ;
 	psPC->DayTD++ ;
 	psPC->MonTD++ ;
