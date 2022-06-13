@@ -114,7 +114,7 @@ int	xPulseCountIncrement(int Idx) {
 	if (OUTSIDE(0, Idx, pcntNumCh, int)) return erFAILURE;
 	pulsecnt_t * psPC = psPCdata[Idx] ;
 	psPC->MinTD++ ;
-	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high\n") ;
+	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high\r\n") ;
 	psPC->HourTD++ ;
 	psPC->DayTD++ ;
 	psPC->MonTD++ ;
@@ -127,28 +127,28 @@ void vPulseCountReport(void) {
 	xTimeGMTime(xTimeStampAsSeconds(sTSZ.usecs), &sTM, 0) ;
 	for (int i = 0; i < pcntNumCh; ++i) {
 		pulsecnt_t * psPC = psPCdata[i] ;
-		printfx("%d: MinTD=%u  HourTD=%u  DayTD=%u  MonTD=%u  YearTD=%u\n",
+		printfx("%d: MinTD=%u  HourTD=%u  DayTD=%u  MonTD=%u  YearTD=%u\r\n",
 				i, psPC->MinTD, psPC->HourTD, psPC->DayTD, psPC->MonTD, psPC->YearTD) ;
 		printfx("Min :  ") ;
 		for (int j = 0; j < MINUTES_IN_HOUR; ++j) {
 			uint32_t Col = (j == sTM.tm_min) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Min[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\nHour:  ") ;
+		printfx("\r\nHour:  ") ;
 		for (int j = 0; j < HOURS_IN_DAY; ++j) {
 			uint32_t Col = (j == sTM.tm_hour) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Hour[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\nDay :  ") ;
+		printfx("\r\nDay :  ") ;
 		for (int j = 0; j < DAYS_IN_MONTH_MAX; ++j) {
 			uint32_t Col = (j == sTM.tm_mday) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Day[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\nMon :  ") ;
+		printfx("\r\nMon :  ") ;
 		for (int j = 0; j < MONTHS_IN_YEAR; ++j) {
 			uint32_t Col = (j == sTM.tm_mon) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Mon[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\nYear:  %u\n\n", psPC->Year) ;
+		printfx("\r\nYear:  %u\r\n\n", psPC->Year) ;
 	}
 }
