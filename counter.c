@@ -1,10 +1,11 @@
 /*
  * counter.c
+ * Copyright (c) 2021-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-#include	"counter.h"
-#include	"printfx.h"
-#include	"definitions.h"
+#include "counter.h"
+#include "printfx.h"
+#include "definitions.h"
 
 /* Design notes:
  * -------------
