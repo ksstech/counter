@@ -62,7 +62,8 @@ static uint8_t pcntNumCh;
 // ########################################### Public functions ####################################
 
 int xPulseCountInit(int NumCh) {
-	if (OUTSIDE(0, NumCh, 255, int)) return erFAILURE;
+	if (OUTSIDE(0, NumCh, 255))
+		return erFAILURE;
 	pcntNumCh = NumCh ;
 	psPCdata = pvRtosMalloc(NumCh * sizeof(pulsecnt_t)) ;
 	return erSUCCESS;
@@ -74,7 +75,8 @@ int xPulseCountInit(int NumCh) {
  * @return	-1 = repeat call this minute, 0 = normal update, 1 = month end update
  */
 int	xPulseCountUpdate(struct tm * psTM) {
-	if (psTM->tm_sec != 0 || psTM->tm_min == LastMin) return -1; // ??:??:00, once only..
+	if (psTM->tm_sec != 0 || psTM->tm_min == LastMin)
+		return -1; 										// ??:??:00, once only..
 	LastMin = psTM->tm_min ;
 	int iRV = 0 ;										// default for "NORMAL" update
 	for (int i = 0; i < pcntNumCh; ++i) {
@@ -96,15 +98,18 @@ int	xPulseCountUpdate(struct tm * psTM) {
 			continue ;
 		}
 
-		if (psTM->tm_hour != 0) continue;				// 0 -> 23
+		if (psTM->tm_hour != 0)
+			continue;									// 0 -> 23
 		psPC->Day[psTM->tm_mday-1] = psPC->DayTD ;		// persist last day (make 0 relative)
 		psPC->DayTD = 0 ;
 
-		if (psTM->tm_mday != 1) continue;				// 1 -> 31
+		if (psTM->tm_mday != 1)
+			continue;									// 1 -> 31
 		psPC->Mon[psTM->tm_mon] = psPC->MonTD ;			// persist last month
 		psPC->MonTD = 0 ;
 
-		if (psTM->tm_mon != 0) continue;				// 0 -> 11
+		if (psTM->tm_mon != 0)
+			continue;									// 0 -> 11
 		psPC->Year = psPC->YearTD ;						// persist last year
 		psPC->YearTD = 0 ;
 	}
@@ -112,7 +117,8 @@ int	xPulseCountUpdate(struct tm * psTM) {
 }
 
 int	xPulseCountIncrement(int Idx) {
-	if (OUTSIDE(0, Idx, pcntNumCh, int)) return erFAILURE;
+	if (OUTSIDE(0, Idx, pcntNumCh))
+		return erFAILURE;
 	pulsecnt_t * psPC = psPCdata[Idx] ;
 	psPC->MinTD++ ;
 	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high\r\n") ;
