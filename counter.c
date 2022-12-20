@@ -4,8 +4,10 @@
  */
 
 #include "counter.h"
+#include "hal_variables.h"
 #include "printfx.h"
 #include "definitions.h"
+#include "x_errors_events.h"
 
 /* Design notes:
  * -------------
@@ -43,11 +45,11 @@
 // ########################################## Structures ###########################################
 
 typedef struct __attribute__((packed)) {
-	uint8_t		MinTD,	Min[MINUTES_IN_HOUR] ;
-	uint8_t 	HourTD, Hour[HOURS_IN_DAY] ;
-	uint16_t	DayTD,	Day[DAYS_IN_MONTH_MAX] ;
-	uint16_t	MonTD,	Mon[MONTHS_IN_YEAR] ;
-	uint32_t	YearTD,	Year ;
+	u8_t		MinTD,	Min[MINUTES_IN_HOUR] ;
+	u8_t 	HourTD, Hour[HOURS_IN_DAY] ;
+	u16_t	DayTD,	Day[DAYS_IN_MONTH_MAX] ;
+	u16_t	MonTD,	Mon[MONTHS_IN_YEAR] ;
+	u32_t	YearTD,	Year ;
 } pulsecnt_t ;
 
 // ####################################### Public variables ########################################
@@ -57,7 +59,7 @@ typedef struct __attribute__((packed)) {
 
 pulsecnt_t * psPCdata ;
 static int LastMin = -1 ;
-static uint8_t pcntNumCh;
+static u8_t pcntNumCh;
 
 // ########################################### Public functions ####################################
 
@@ -80,7 +82,7 @@ int	xPulseCountUpdate(struct tm * psTM) {
 	LastMin = psTM->tm_min ;
 	int iRV = 0 ;										// default for "NORMAL" update
 	for (int i = 0; i < pcntNumCh; ++i) {
-		pulsecnt_t * psPC = psPCdata[i] ;
+		pulsecnt_t * psPC = &psPCdata[i] ;
 		psPC->Min[psTM->tm_min]	= psPC->MinTD ;			// persist last minute
 		psPC->MinTD = 0 ;
 
@@ -119,7 +121,7 @@ int	xPulseCountUpdate(struct tm * psTM) {
 int	xPulseCountIncrement(int Idx) {
 	if (OUTSIDE(0, Idx, pcntNumCh))
 		return erFAILURE;
-	pulsecnt_t * psPC = psPCdata[Idx] ;
+	pulsecnt_t * psPC = &psPCdata[Idx] ;
 	psPC->MinTD++ ;
 	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high\r\n") ;
 	psPC->HourTD++ ;
@@ -133,27 +135,27 @@ void vPulseCountReport(void) {
 	struct tm sTM ;
 	xTimeGMTime(xTimeStampAsSeconds(sTSZ.usecs), &sTM, 0) ;
 	for (int i = 0; i < pcntNumCh; ++i) {
-		pulsecnt_t * psPC = psPCdata[i] ;
+		pulsecnt_t * psPC = &psPCdata[i] ;
 		printfx("%d: MinTD=%u  HourTD=%u  DayTD=%u  MonTD=%u  YearTD=%u\r\n",
 				i, psPC->MinTD, psPC->HourTD, psPC->DayTD, psPC->MonTD, psPC->YearTD) ;
 		printfx("Min :  ") ;
 		for (int j = 0; j < MINUTES_IN_HOUR; ++j) {
-			uint32_t Col = (j == sTM.tm_min) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
+			u32_t Col = (j == sTM.tm_min) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Min[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
 		printfx("\r\nHour:  ") ;
 		for (int j = 0; j < HOURS_IN_DAY; ++j) {
-			uint32_t Col = (j == sTM.tm_hour) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
+			u32_t Col = (j == sTM.tm_hour) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Hour[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
 		printfx("\r\nDay :  ") ;
 		for (int j = 0; j < DAYS_IN_MONTH_MAX; ++j) {
-			uint32_t Col = (j == sTM.tm_mday) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
+			u32_t Col = (j == sTM.tm_mday) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Day[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
 		printfx("\r\nMon :  ") ;
 		for (int j = 0; j < MONTHS_IN_YEAR; ++j) {
-			uint32_t Col = (j == sTM.tm_mon) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
+			u32_t Col = (j == sTM.tm_mon) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
 			printfx("%C%u%C  ", Col, psPC->Mon[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
 		printfx("\r\nYear:  %u\r\n\n", psPC->Year) ;

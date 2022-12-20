@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021 Andre M. Maree / KSS Technologies (Pty) Ltd.
+ * Copyright (c) 2022 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
 #pragma once
 
-#include	<time.h>
+#include <time.h>
 
 #ifdef __cplusplus
 extern "C" {
