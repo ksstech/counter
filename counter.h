@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Andre M. Maree / KSS Technologies (Pty) Ltd.
+ * counter.h - Copyright (c) 2022-23 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
 #pragma once
@@ -21,5 +21,5 @@ int xPulseCountIncrement(int);
 void vPulseCountReport(void);
 
 #ifdef __cplusplus
-	}
+}
 #endif
