@@ -1,10 +1,10 @@
 # COUNTER
 
-set( srcs "counter.c" )
-set( include_dirs "." )
-set( priv_include_dirs )
-set( requires  )
-set( priv_requires )
+#set( srcs "counter.c" )
+#set( include_dirs "." )
+#set( priv_include_dirs )
+#set( requires  )
+#set( priv_requires )
 
 idf_component_register(
 	SRCS ${srcs}
