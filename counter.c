@@ -131,7 +131,7 @@ int	xPulseCountIncrement(int Idx) {
 
 void vPulseCountReport(void) {
 	struct tm sTM ;
-	xTimeGMTime(xTimeStampAsSeconds(sTSZ.usecs), &sTM, 0) ;
+	xTimeGMTime(xTimeStampSeconds(sTSZ.usecs), &sTM, 0) ;
 	for (int i = 0; i < pcntNumCh; ++i) {
 		pulsecnt_t * psPC = &psPCdata[i] ;
 		printfx("%d: MinTD=%u  HourTD=%u  DayTD=%u  MonTD=%u  YearTD=%u\r\n",
