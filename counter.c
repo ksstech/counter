@@ -64,7 +64,8 @@ static u8_t pcntNumCh;
 // ########################################### Public functions ####################################
 
 int xPulseCountInit(int NumCh) {
-	if (OUTSIDE(0, NumCh, 255)) return erFAILURE;
+	if (OUTSIDE(0, NumCh, 255))
+		return erFAILURE;
 	pcntNumCh = NumCh ;
 	psPCdata = pvRtosMalloc(NumCh * sizeof(pulsecnt_t)) ;
 	return erSUCCESS;
@@ -118,7 +119,8 @@ int	xPulseCountUpdate(struct tm * psTM) {
 }
 
 int	xPulseCountIncrement(int Idx) {
-	if (OUTSIDE(0, Idx, pcntNumCh)) return erFAILURE;
+	if (OUTSIDE(0, Idx, pcntNumCh))
+		return erFAILURE;
 	pulsecnt_t * psPC = &psPCdata[Idx] ;
 	psPC->MinTD++ ;
 	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high" strNL) ;
