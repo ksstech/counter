@@ -121,7 +121,7 @@ int	xPulseCountIncrement(int Idx) {
 	if (OUTSIDE(0, Idx, pcntNumCh)) return erFAILURE;
 	pulsecnt_t * psPC = &psPCdata[Idx] ;
 	psPC->MinTD++ ;
-	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high\r\n") ;
+	IF_PL(psPC->MinTD == 0, "Wrapped, Pulse rate too high" strNL) ;
 	psPC->HourTD++ ;
 	psPC->DayTD++ ;
 	psPC->MonTD++ ;
@@ -134,28 +134,28 @@ void vPulseCountReport(void) {
 	xTimeGMTime(xTimeStampSeconds(sTSZ.usecs), &sTM, 0) ;
 	for (int i = 0; i < pcntNumCh; ++i) {
 		pulsecnt_t * psPC = &psPCdata[i] ;
-		printfx("%d: MinTD=%u  HourTD=%u  DayTD=%u  MonTD=%u  YearTD=%u\r\n",
+		PX("%d: MinTD=%u  HourTD=%u  DayTD=%u  MonTD=%u  YearTD=%u" strNL,
 				i, psPC->MinTD, psPC->HourTD, psPC->DayTD, psPC->MonTD, psPC->YearTD) ;
-		printfx("Min :  ") ;
+		PX("Min :  ") ;
 		for (int j = 0; j < MINUTES_IN_HOUR; ++j) {
 			u32_t Col = (j == sTM.tm_min) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
-			printfx("%C%u%C  ", Col, psPC->Min[j], xpfSGR(attrRESET,0,0,0)) ;
+			PX("%C%u%C  ", Col, psPC->Min[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\r\nHour:  ") ;
+		PX(strNL "Hour:  ") ;
 		for (int j = 0; j < HOURS_IN_DAY; ++j) {
 			u32_t Col = (j == sTM.tm_hour) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
-			printfx("%C%u%C  ", Col, psPC->Hour[j], xpfSGR(attrRESET,0,0,0)) ;
+			PX("%C%u%C  ", Col, psPC->Hour[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\r\nDay :  ") ;
+		PX(strNL "Day :  ") ;
 		for (int j = 0; j < DAYS_IN_MONTH_MAX; ++j) {
 			u32_t Col = (j == sTM.tm_mday) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
-			printfx("%C%u%C  ", Col, psPC->Day[j], xpfSGR(attrRESET,0,0,0)) ;
+			PX("%C%u%C  ", Col, psPC->Day[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\r\nMon :  ") ;
+		PX(strNL "Mon :  ") ;
 		for (int j = 0; j < MONTHS_IN_YEAR; ++j) {
 			u32_t Col = (j == sTM.tm_mon) ? xpfSGR(colourFG_CYAN,0,0,0) : xpfSGR(attrRESET,0,0,0) ;
-			printfx("%C%u%C  ", Col, psPC->Mon[j], xpfSGR(attrRESET,0,0,0)) ;
+			PX("%C%u%C  ", Col, psPC->Mon[j], xpfSGR(attrRESET,0,0,0)) ;
 		}
-		printfx("\r\nYear:  %u\r\n\n", psPC->Year) ;
+		PX(strNL "Year:  %u\r\n\n", psPC->Year) ;
 	}
 }
