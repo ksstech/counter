@@ -5,7 +5,7 @@
 
 #include "counter.h"
 #include "hal_platform.h"
-#include "printfx.h"
+#include "report.h"
 #include "definitions.h"
 #include "x_errors_events.h"
 
