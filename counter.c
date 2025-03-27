@@ -1,7 +1,4 @@
-/*
- * counter.c
- * Copyright (c) 2021-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
- */
+// counter.c - Copyright (c) 2021-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "counter.h"
 #include "hal_platform.h"
